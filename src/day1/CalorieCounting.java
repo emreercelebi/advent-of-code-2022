@@ -4,6 +4,7 @@ import helpers.Helpers;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class CalorieCounting {
@@ -18,6 +19,7 @@ public class CalorieCounting {
         this.computeCalorieTotals();
 
         System.out.println("CalorieCounting part 1: " + this.part1());
+        System.out.println("CalorieCounting part 2: " + this.part2());
     }
 
     private void computeCalorieTotals() {
@@ -47,5 +49,15 @@ public class CalorieCounting {
             max = Math.max(max, calorieTotal);
         }
         return max;
+    }
+
+    /**
+     * @return sum of largest three values in calorieTotals
+     */
+    private int part2() {
+        Collections.sort(this.calorieTotals);
+        return this.calorieTotals.get(this.calorieTotals.size() - 1) +
+                this.calorieTotals.get(this.calorieTotals.size() - 2) +
+                this.calorieTotals.get(this.calorieTotals.size() - 3);
     }
 }
