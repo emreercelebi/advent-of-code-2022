@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Helpers {
+    public static String FILE_NAME = "input.txt";
+    public static String TEST_FILE_NAME = "input-test.txt";
+
     public static List<String> getFileLines(URL path) {
         File file = new File(path.getFile());
         BufferedReader br = null;
