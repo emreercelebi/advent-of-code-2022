@@ -31,6 +31,13 @@ public class RucksackReorganization {
         return this.calculatePriority(this.commonItemsWithinTriplets);
     }
 
+    /**
+     * a through z have priorities 1 - 26
+     * A through Z have priorities 27 - 52
+     *
+     * @param items
+     * @return sum of priority of items in a given list
+     */
     private int calculatePriority(List<Character> items) {
         int prioritySum = 0;
         for (char c : items) {
@@ -43,6 +50,10 @@ public class RucksackReorganization {
         return prioritySum;
     }
 
+    /**
+     * finds items that appear in both compartments of a given sack and stores
+     * them in commonItemsWithinSacks
+     */
     private void buildCommonItemsWithinSacks() {
         this.commonItemsWithinSacks = new ArrayList<>();
         for (String line : this.fileLines) {
@@ -63,6 +74,10 @@ public class RucksackReorganization {
         }
     }
 
+    /**
+     * finds items that appear in all three of a given triplet of sacks and stores them
+     * in commonItemsWithinTriplets
+     */
     private void buildCommonItemsWithinTriplets() {
         this.commonItemsWithinTriplets = new ArrayList<>();
         for (int i = 0; i < this.fileLines.size(); i += 3) {
