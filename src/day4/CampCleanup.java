@@ -41,10 +41,10 @@ public class CampCleanup {
         for (List<Integer> intervalPair : intervalPairs) {
             boolean firstIntervalOverlapsSecond = intervalPair.get(1) >= intervalPair.get(2) &&
                     intervalPair.get(1) <= intervalPair.get(3);
-            boolean secondIntervalContainsFirst = intervalPair.get(3) >= intervalPair.get(0) &&
+            boolean secondIntervalOverlapsFirst = intervalPair.get(3) >= intervalPair.get(0) &&
                     intervalPair.get(3) <= intervalPair.get(1);
 
-            if (firstIntervalOverlapsSecond || secondIntervalContainsFirst) {
+            if (firstIntervalOverlapsSecond || secondIntervalOverlapsFirst) {
                 overlapCount++;
             }
         }
