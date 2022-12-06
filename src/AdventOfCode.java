@@ -3,6 +3,7 @@ import day2.RockPaperScissors;
 import day3.RucksackReorganization;
 import day4.CampCleanup;
 import day5.SupplyStacks;
+import day6.TuningTrouble;
 
 public class AdventOfCode {
     public static void main(String[] args) {
@@ -11,5 +12,6 @@ public class AdventOfCode {
         new RucksackReorganization();
         new CampCleanup();
         new SupplyStacks();
+        new TuningTrouble();
     }
 }
