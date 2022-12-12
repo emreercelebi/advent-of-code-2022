@@ -6,6 +6,7 @@ import day5.SupplyStacks;
 import day6.TuningTrouble;
 import day7.NoSpaceLeftOnDevice;
 import day8.TreetopTreeHouse;
+import day9.RopeBridge;
 
 public class AdventOfCode {
     public static void main(String[] args) {
@@ -17,5 +18,6 @@ public class AdventOfCode {
         new TuningTrouble();
         new NoSpaceLeftOnDevice();
         new TreetopTreeHouse();
+        new RopeBridge();
     }
 }
