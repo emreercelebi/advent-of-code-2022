@@ -3,6 +3,7 @@ package day8;
 import helpers.Helpers;
 
 import java.net.URL;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -17,7 +18,7 @@ public class TreetopTreeHouse {
 
         this.buildTreeGrid();
         this.calculateVisibilities();
-        System.out.println(this.treeGrid.toString());
+        this.calculateViewingDistances();
 
         System.out.println("Treetop Tree House part 1: " + this.part1());
         System.out.println("Treetop Tree House part 2: " + this.part2());
@@ -84,6 +85,35 @@ public class TreetopTreeHouse {
         }
     }
 
+    private void calculateViewingDistances() {
+        int[][] directions = {{-1, 0}, {0, -1}, {1, 0}, {0, 1}};
+
+        for (int row = 0; row < this.treeGrid.size(); row++) {
+            for (int col = 0; col < this.treeGrid.get(0).size(); col++) {
+                Tree tree = this.treeGrid.get(row).get(col);
+                int maxHeight = tree.height;
+
+                for (int dirIndex = 0; dirIndex < directions.length; dirIndex++) {
+                    int viewingDistance = 0;
+                    int r = row, c = col;
+                    int[] dir = directions[dirIndex];
+                    r += dir[0];
+                    c += dir[1];
+                    while (r >= 0 && r < this.treeGrid.size() && c >= 0 && c < this.treeGrid.get(0).size()) {
+                        int height = this.treeGrid.get(r).get(c).height;
+                        viewingDistance++;
+                        if (height >= maxHeight) {
+                            break;
+                        }
+                        r += dir[0];
+                        c += dir[1];
+                    }
+                    tree.viewingDistance[dirIndex] = viewingDistance;
+                }
+            }
+        }
+    }
+
     private int part1() {
         int count = 0;
         for (List<Tree> row : this.treeGrid) {
@@ -97,7 +127,13 @@ public class TreetopTreeHouse {
     }
 
     private int part2() {
-        return -1;
+        int max = -1;
+        for (List<Tree> row : this.treeGrid) {
+            for (Tree tree : row) {
+                max = Math.max(max, tree.scenicScore());
+            }
+        }
+        return max;
     }
 
     private class Tree {
@@ -106,15 +142,19 @@ public class TreetopTreeHouse {
         boolean visibleFromLeft;
         boolean visibleFromBottom;
         boolean visibleFromRight;
+        int[] viewingDistance; // top, left, bottom, right
 
         Tree(int height) {
             this.height = height;
+            this.viewingDistance = new int[4];
         }
 
         boolean isVisible() {
             return this.visibleFromTop || this.visibleFromLeft || this.visibleFromRight || this.visibleFromBottom;
         }
 
-        public String toString() { return this.isVisible() + ""; }
+        int scenicScore() {
+            return Arrays.stream(this.viewingDistance).reduce(1, (a, b) -> a * b);
+        }
     }
 }
