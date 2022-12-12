@@ -32,63 +32,101 @@ public class RopeBridge {
         });
     }
 
-    private int part1() {
+    private int simulateMovements(int knots) {
         Map<Integer, Set<Integer>> visited = new HashMap<>();
         visited.put(0, new HashSet<>());
-        visited.get(0).add(0);;
-        int headX = 0, headY = 0, tailX = 0, tailY = 0;
+        visited.get(0).add(0);
+        int[][] positions = new int[knots][2];
+
         for (Move move : this.moves) {
-            if (move.direction == Direction.UP) {
-                headY += move.distance;
-            } else if (move.direction == Direction.DOWN) {
-                headY -= move.distance;
-            } else if (move.direction == Direction.LEFT) {
-                headX -= move.distance;
-            } else {
-                headX += move.distance;
-            }
-
-            if (headX == tailX) {
-                while (Math.abs(headY - tailY) > 1) {
-                    tailY += headY - tailY > 0 ? 1 : -1;
-                    visited.putIfAbsent(tailX, new HashSet<>());
-                    visited.get(tailX).add(tailY);
+            for (int i = 0; i < move.distance; i++) {
+                if (move.direction == Direction.UP) {
+                    positions[0][1]++;
+                } else if (move.direction == Direction.DOWN) {
+                    positions[0][1]--;
+                } else if (move.direction == Direction.LEFT) {
+                    positions[0][0]--;
+                } else {
+                    positions[0][0]++;
                 }
-            } else if (headY == tailY) {
-                while (Math.abs(headX - tailX) > 1) {
-                    tailX += headX - tailX > 0 ? 1 : -1;
-                    visited.putIfAbsent(tailX, new HashSet<>());
-                    visited.get(tailX).add(tailY);
-                }
-            } else {
-                if (Math.abs(headX - tailX) > 1) {
-                    tailY += headY - tailY > 0 ? 1 : -1;
-                    while (Math.abs(headX - tailX) > 1) {
-                        tailX += headX - tailX > 0 ? 1 : -1;
-                        visited.putIfAbsent(tailX, new HashSet<>());
-                        visited.get(tailX).add(tailY);
-                    }
-                } else if (Math.abs(headY - tailY) > 1) {
-                    tailX += headX - tailX > 0 ? 1 : -1;
-                    while (Math.abs(headY - tailY) > 1) {
-                        tailY += headY - tailY > 0 ? 1 : -1;
-                        visited.putIfAbsent(tailX, new HashSet<>());
-                        visited.get(tailX).add(tailY);
-                    }
-                }
+                runMovement(1, positions, visited);
             }
         }
 
-        int spacesVisited = 0;
+        int spacesTailVisited = 0;
         for (Set<Integer> spaces : visited.values()) {
-            spacesVisited += spaces.size();
+            spacesTailVisited += spaces.size();
         }
 
-        return spacesVisited;
+        return spacesTailVisited;
+    }
+
+    private void runMovement(int currentKnot, int[][] positions, Map<Integer, Set<Integer>> visited) {
+        int prevX = positions[currentKnot - 1][0],
+                prevY = positions[currentKnot - 1][1],
+                currX = positions[currentKnot][0],
+                currY = positions[currentKnot][1];
+        boolean isTail = currentKnot == positions.length - 1;
+        if (prevX == currX) {
+            while (Math.abs(prevY - currY) > 1) {
+                currY += prevY - currY > 0 ? 1 : -1;
+                if (isTail) {
+                    visited.putIfAbsent(currX, new HashSet<>());
+                    visited.get(currX).add(currY);
+                }
+            }
+        } else if (prevY == currY) {
+            while (Math.abs(prevX - currX) > 1) {
+                currX += prevX - currX > 0 ? 1 : -1;
+                if (isTail) {
+                    visited.putIfAbsent(currX, new HashSet<>());
+                    visited.get(currX).add(currY);
+                }
+            }
+        } else {
+            while (Math.abs(prevX - currX) > 1 && Math.abs(prevY - currY) > 1) {
+                currX += prevX - currX > 0 ? 1 : -1;
+                currY += prevY - currY > 0 ? 1 : -1;
+                if (isTail) {
+                    visited.putIfAbsent(currX, new HashSet<>());
+                    visited.get(currX).add(currY);
+                }
+            }
+            if (Math.abs(prevX - currX) > 1) {
+                currY += prevY - currY > 0 ? 1 : -1;
+                while (Math.abs(prevX - currX) > 1) {
+                    currX += prevX - currX > 0 ? 1 : -1;
+                    if (isTail) {
+                        visited.putIfAbsent(currX, new HashSet<>());
+                        visited.get(currX).add(currY);
+                    }
+                }
+            } else if (Math.abs(prevY - currY) > 1) {
+                currX += prevX - currX > 0 ? 1 : -1;
+                while (Math.abs(prevY - currY) > 1) {
+                    currY += prevY - currY > 0 ? 1 : -1;
+                    if (isTail) {
+                        visited.putIfAbsent(currX, new HashSet<>());
+                        visited.get(currX).add(currY);
+                    }
+                }
+            }
+        }
+
+        positions[currentKnot][0] = currX;
+        positions[currentKnot][1] = currY;
+
+        if (currentKnot < positions.length - 1) {
+            runMovement(currentKnot + 1, positions, visited);
+        }
+    }
+
+    private int part1() {
+        return simulateMovements(2);
     }
 
     private int part2() {
-        return -1;
+        return simulateMovements(10);
     }
 
     enum Direction {
