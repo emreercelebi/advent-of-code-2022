@@ -1,4 +1,5 @@
 import day1.CalorieCounting;
+import day10.CathodeRayTube;
 import day2.RockPaperScissors;
 import day3.RucksackReorganization;
 import day4.CampCleanup;
@@ -19,5 +20,6 @@ public class AdventOfCode {
         new NoSpaceLeftOnDevice();
         new TreetopTreeHouse();
         new RopeBridge();
+        new CathodeRayTube();
     }
 }
